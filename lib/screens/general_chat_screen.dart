@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:chatterbox/models/chat_session.dart';
 import 'package:chatterbox/models/message.dart';
 import 'package:chatterbox/models/ai_model.dart';
-import 'package:chatterbox/services/ai_general_chat_service.dart'; // Use the new general service
+import 'package:chatterbox/services/ai_text_writer_service.dart'; // Using this for now
 import 'package:chatterbox/widgets/typing_indicator.dart';
 import 'package:chatterbox/widgets/chat_bubble.dart';
 
@@ -18,13 +18,16 @@ class GeneralChatScreen extends StatefulWidget {
 class _GeneralChatScreenState extends State<GeneralChatScreen> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final AiGeneralChatService _aiService = AiGeneralChatService(); // Use the general service
+  final AiTextWriterService _aiService = AiTextWriterService();
   bool _isTyping = false;
 
   @override
   void initState() {
     super.initState();
-    // No initial prompt from the AI for general chat
+    // The initial prompt is sent here as the first message from the AI.
+    if (widget.session.messages.length == 1 && !widget.session.messages.first.isUser) {
+      _getAiResponse(widget.session.messages.first.text!);
+    }
   }
 
   Future<void> _handleSubmitted(String text) async {
@@ -107,7 +110,21 @@ class _GeneralChatScreenState extends State<GeneralChatScreen> {
                   imageUrl: message.imageUrl,
                   isUser: message.isUser,
                   onImageTap: (imageUrl) {
-                    // No image handling in general chat
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          backgroundColor: Colors.black,
+                          appBar: AppBar(
+                            backgroundColor: Colors.black,
+                            iconTheme: const IconThemeData(color: Colors.white),
+                          ),
+                          body: Center(
+                            child: Image.network(imageUrl),
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 );
               },

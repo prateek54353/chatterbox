@@ -10,7 +10,7 @@ import 'package:chatterbox/screens/text_writer_chat_screen.dart';
 import 'package:chatterbox/screens/image_generator_chat_screen.dart';
 import 'package:chatterbox/screens/code_tutor_chat_screen.dart';
 import 'package:chatterbox/screens/translator_chat_screen.dart';
-import 'package:chatterbox/screens/general_chat_screen.dart';
+import 'package:chatterbox/screens/general_chat_screen.dart'; // Import the new screen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -56,11 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final newSession = session ??
         ChatSession(
           id: const Uuid().v4(),
-          title: modelType.title, // Use the model title for the session
+          title: modelType.title,
           modelType: modelType,
-          messages: [Message(text: modelType.initialPrompt, isUser: false)], // Start with a system prompt
+          messages: (modelType == AiModelType.textWriter || modelType == AiModelType.generalChat)
+            ? [Message(text: modelType.initialPrompt, isUser: false)]
+            : [],
           lastMessage: 'New session started.',
-          firstUserMessage: '', // User hasn't sent a message yet
+          firstUserMessage: '',
         );
 
     Widget targetScreen;
@@ -90,16 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (result != null && result is ChatSession) {
-      // Only update history if there are more than the initial system message
-      if (result.messages.length > 1) {
+      if (result.messages.isNotEmpty) {
         final existingIndex = _chatHistory.indexWhere((s) => s.id == result.id);
         if (existingIndex != -1) {
-          // Update existing session
           setState(() {
             _chatHistory[existingIndex] = result;
           });
         } else {
-          // Add new session
           setState(() {
             _chatHistory.insert(0, result);
           });
@@ -323,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   // New Chat FAB
                   FloatingActionButton(
-                    onPressed: () => _navigateToChat(null, modelType: AiModelType.generalChat), // Default to general chat
+                    onPressed: () => _navigateToChat(null, modelType: AiModelType.generalChat), // Now defaults to general chat
                     backgroundColor: Colors.deepPurpleAccent,
                     child: const Icon(Icons.add, color: Colors.white),
                   ),

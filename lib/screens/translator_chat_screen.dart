@@ -21,12 +21,30 @@ class _TranslatorChatScreenState extends State<TranslatorChatScreen> {
   final AiTranslatorService _aiService = AiTranslatorService();
   bool _isTyping = false;
 
+  // A comprehensive, alphabetized list of 100 languages.
+  final List<String> _languages = [
+    'Afrikaans', 'Albanian', 'Amharic', 'Arabic', 'Armenian', 'Azerbaijani', 'Basque',
+    'Belarusian', 'Bengali', 'Bosnian', 'Bulgarian', 'Burmese', 'Catalan', 'Cebuano',
+    'Chichewa', 'Chinese', 'Corsican', 'Croatian', 'Czech', 'Danish', 'Dutch',
+    'English', 'Esperanto', 'Estonian', 'Filipino', 'Finnish', 'French', 'Frisian',
+    'Galician', 'Georgian', 'German', 'Greek', 'Gujarati', 'Haitian Creole', 'Hausa',
+    'Hawaiian', 'Hebrew', 'Hindi', 'Hmong', 'Hungarian', 'Icelandic', 'Igbo', 'Indonesian',
+    'Irish', 'Italian', 'Japanese', 'Javanese', 'Kannada', 'Kazakh', 'Khmer', 'Korean',
+    'Kurdish', 'Kyrgyz', 'Lao', 'Latin', 'Latvian', 'Lithuanian', 'Luxembourgish',
+    'Macedonian', 'Malagasy', 'Malay', 'Malayalam', 'Maltese', 'Maori', 'Marathi',
+    'Mongolian', 'Nepali', 'Norwegian', 'Pashto', 'Persian', 'Polish', 'Portuguese',
+    'Punjabi', 'Romanian', 'Russian', 'Samoan', 'Scots Gaelic', 'Serbian', 'Sesotho',
+    'Shona', 'Sindhi', 'Sinhala', 'Slovak', 'Slovenian', 'Somali', 'Spanish', 'Sundanese',
+    'Swahili', 'Swedish', 'Tajik', 'Tamil', 'Telugu', 'Thai', 'Turkish', 'Ukrainian',
+    'Urdu', 'Uzbek', 'Vietnamese', 'Welsh', 'Xhosa', 'Yiddish', 'Yoruba', 'Zulu'
+  ];
+  
+  late String _selectedTargetLanguage;
+
   @override
   void initState() {
     super.initState();
-    if (widget.session.messages.length == 1 && !widget.session.messages.first.isUser) {
-      _getAiResponse(widget.session.messages.first.text!);
-    }
+    _selectedTargetLanguage = _languages.first;
   }
 
   Future<void> _handleSubmitted(String text) async {
@@ -46,7 +64,7 @@ class _TranslatorChatScreenState extends State<TranslatorChatScreen> {
 
   Future<void> _getAiResponse(String prompt) async {
     try {
-      final aiResponse = await _aiService.getResponse(prompt);
+      final aiResponse = await _aiService.getResponse(prompt, _selectedTargetLanguage);
       setState(() {
         widget.session.messages.add(aiResponse);
         _isTyping = false;
@@ -130,6 +148,33 @@ class _TranslatorChatScreenState extends State<TranslatorChatScreen> {
               ),
             ),
             if (_isTyping) const TypingIndicator(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              color: Colors.black,
+              child: Row(
+                children: [
+                  const Text('Translate to:', style: TextStyle(color: Colors.white70)),
+                  const SizedBox(width: 10),
+                  DropdownButton<String>(
+                    value: _selectedTargetLanguage,
+                    dropdownColor: Colors.grey[850],
+                    style: const TextStyle(color: Colors.white),
+                    icon: const Icon(Icons.arrow_drop_down, color: Colors.white70),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedTargetLanguage = newValue!;
+                      });
+                    },
+                    items: _languages.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
               color: Colors.black,

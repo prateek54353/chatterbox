@@ -5,14 +5,21 @@ import 'package:chatterbox/models/message.dart';
 class AiTranslatorService {
   static const String _textApiUrl = 'https://text.pollinations.ai/openai';
 
-  Future<Message> getResponse(String prompt) async {
+  Future<Message> getResponse(String prompt, String targetLanguage) async {
     try {
+      // Construct a robust system message for translation.
+      final systemMessage = 'You are an expert language translator. '
+                            'Your task is to translate the given text to "$targetLanguage". '
+                            'Provide only the translated text and nothing else. '
+                            'Do not include any conversational filler, explanations, or quotes.';
+
+      // Create the API request body with the enhanced prompt.
       final response = await http.post(
         Uri.parse(_textApiUrl),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'messages': [
-            {'role': 'system', 'content': 'You are an expert language translator. Translate the given text accurately and naturally.'},
+            {'role': 'system', 'content': systemMessage},
             {'role': 'user', 'content': prompt}
           ]
         }),

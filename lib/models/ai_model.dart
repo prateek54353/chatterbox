@@ -36,7 +36,7 @@ extension AiModelTypeExtension on AiModelType {
       case AiModelType.translator:
         return 'You are an expert language translator...';
       case AiModelType.generalChat:
-        return 'You are a helpful assistant.';
+        return 'Hi there! Ask me anything.';
     }
   }
 }
