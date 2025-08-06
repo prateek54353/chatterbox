@@ -7,6 +7,7 @@ import 'package:chatterbox/screens/text_writer_chat_screen.dart'; // Import the 
 import 'package:chatterbox/screens/image_generator_chat_screen.dart';
 import 'package:chatterbox/screens/code_tutor_chat_screen.dart';
 import 'package:chatterbox/screens/translator_chat_screen.dart';
+import 'package:chatterbox/screens/general_chat_screen.dart'; // Import the new general chat screen
 
 class RecentChatsScreen extends StatefulWidget {
   const RecentChatsScreen({super.key});
@@ -87,7 +88,9 @@ class _RecentChatsScreenState extends State<RecentChatsScreen> {
                               ? Icons.image
                               : session.modelType == AiModelType.codeTutor
                                   ? Icons.code
-                                  : Icons.translate,
+                                  : session.modelType == AiModelType.translator
+                                      ? Icons.translate
+                                      : Icons.chat_bubble_outline, // Add icon for general chat
                       color: Colors.deepPurpleAccent,
                     ),
                     title: Text(
@@ -114,6 +117,9 @@ class _RecentChatsScreenState extends State<RecentChatsScreen> {
                           break;
                         case AiModelType.translator:
                           targetScreen = TranslatorChatScreen(session: session);
+                          break;
+                        case AiModelType.generalChat:
+                          targetScreen = GeneralChatScreen(session: session);
                           break;
                       }
 

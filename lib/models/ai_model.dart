@@ -5,6 +5,7 @@ enum AiModelType {
   imageGenerator,
   codeTutor,
   translator,
+  generalChat,
 }
 
 // This extension makes it easy to get metadata for each model type.
@@ -19,6 +20,8 @@ extension AiModelTypeExtension on AiModelType {
         return 'AI Code Tutor';
       case AiModelType.translator:
         return 'AI Translator';
+      case AiModelType.generalChat:
+        return 'General Chat';
     }
   }
 
@@ -32,6 +35,8 @@ extension AiModelTypeExtension on AiModelType {
         return 'You are an expert programming tutor...';
       case AiModelType.translator:
         return 'You are an expert language translator...';
+      case AiModelType.generalChat:
+        return 'You are a helpful assistant.';
     }
   }
 }

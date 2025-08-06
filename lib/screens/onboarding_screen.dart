@@ -46,8 +46,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     } else {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('onboarding_complete', true);
-      if (!mounted) return; // Add this line
-      Navigator.of(context).pushReplacementNamed('/');
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('/home');
     }
   }
 

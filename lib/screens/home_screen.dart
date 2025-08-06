@@ -10,6 +10,7 @@ import 'package:chatterbox/screens/text_writer_chat_screen.dart';
 import 'package:chatterbox/screens/image_generator_chat_screen.dart';
 import 'package:chatterbox/screens/code_tutor_chat_screen.dart';
 import 'package:chatterbox/screens/translator_chat_screen.dart';
+import 'package:chatterbox/screens/general_chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -75,6 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case AiModelType.translator:
         targetScreen = TranslatorChatScreen(session: newSession);
+        break;
+      case AiModelType.generalChat:
+        targetScreen = GeneralChatScreen(session: newSession);
         break;
     }
 
@@ -319,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   // New Chat FAB
                   FloatingActionButton(
-                    onPressed: () => _navigateToChat(null, modelType: AiModelType.textWriter), // Default to text writer
+                    onPressed: () => _navigateToChat(null, modelType: AiModelType.generalChat), // Default to general chat
                     backgroundColor: Colors.deepPurpleAccent,
                     child: const Icon(Icons.add, color: Colors.white),
                   ),

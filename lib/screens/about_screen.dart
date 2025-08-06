@@ -61,7 +61,7 @@ class AboutScreen extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.person, color: Colors.white),
                 title: const Text('Developed by Prateek', style: TextStyle(color: Colors.white)),
-                onTap: () => _launchUrl('https://prateek.co'),
+                onTap: () => _launchUrl('https://github.com/prateek54353'),
               ),
               ListTile(
                 leading: const Icon(Icons.favorite, color: Colors.pinkAccent),
